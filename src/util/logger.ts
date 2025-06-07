@@ -37,5 +37,6 @@ if(isDev) {
     logger.level = "debug";
 }
 
+console.log("for git testing ");
 
 export default logger;  // default bekhalene aaytelo deghre
