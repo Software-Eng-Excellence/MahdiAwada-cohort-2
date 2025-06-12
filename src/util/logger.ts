@@ -24,8 +24,8 @@ const logConsoleFormat = winston.format.combine(
 const logger = winston.createLogger({
     level: "info",
     transports : [
-        new winston.transports.File({ filename: "error.log",dirname: logDir, level: "error", format: logFileFormat}), // kel am a3mel log hutule be file kel l log.errors 
-        new winston.transports.File({ filename: "all.log",dirname:logDir, format: logFileFormat}) // kel combined ykun hun
+        new winston.transports.File({ filename: "error.log",dirname: logDir, level: "error", format: logFileFormat}), 
+        new winston.transports.File({ filename: "all.log",dirname:logDir, format: logFileFormat}) 
     ],
     exceptionHandlers: [
         new winston.transports.File({ filename: "exception.log", dirname: logDir })
@@ -38,4 +38,4 @@ if(isDev) {
 }
 
 
-export default logger;  // default bekhalene aaytelo deghre
+export default logger;  
