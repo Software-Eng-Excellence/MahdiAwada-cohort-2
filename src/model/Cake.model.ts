@@ -17,8 +17,6 @@ export class Cake implements Item {
     private allergies: string;
     private specialIngredients: string;
     private packagingType: string;
-    private price: string;
-    private quantity: string;
 
     constructor(
         type: Type,
@@ -35,8 +33,6 @@ export class Cake implements Item {
         allergies: string,
         specialIngredients: string,
         packagingType: string,
-        price: string,
-        quantity: string
     ) {
         this.type = type;
         this.flavor = flavor;
@@ -52,8 +48,6 @@ export class Cake implements Item {
         this.allergies = allergies;
         this.specialIngredients = specialIngredients;
         this.packagingType = packagingType;
-        this.price = price;
-        this.quantity = quantity;
     }
 
     getCategory(): ItemCategory {
@@ -114,13 +108,5 @@ export class Cake implements Item {
 
     getPackagingType(): string {
         return this.packagingType;
-    }
-
-    getPrice(): string {
-        return this.price;
-    }
-
-    getQuantity(): string {
-        return this.quantity;
     }
 }
