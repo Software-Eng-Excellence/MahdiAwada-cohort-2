@@ -1,4 +1,4 @@
-import { Item } from "./item.model";
+import { Item } from "./Item.model";
 
 export interface Order {
     getItem(): Item;
