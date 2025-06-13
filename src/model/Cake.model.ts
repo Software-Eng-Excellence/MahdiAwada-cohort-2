@@ -1,4 +1,4 @@
-import { Item, ItemCategory } from "./item.model"
+import { Item, ItemCategory } from "./Item.model"
 
 type Type = "Birthday" | "Wedding" | "Anniversary" | "Graduation" | "Baby Shower";
 
