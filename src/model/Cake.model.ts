@@ -1,13 +1,11 @@
 import { Item, ItemCategory } from "./Item.model"
 
-type Type = "Birthday" | "Wedding" | "Anniversary" | "Graduation" | "Baby Shower";
-
 export class Cake implements Item {
-    private type: Type;
+    private type: string;
     private flavor: string;
     private filling: string;
-    private size: string;
-    private layers: string;
+    private size: number;
+    private layers: number;
     private frostingType: string;
     private frostingFlavor: string;
     private decorationType: string;
@@ -19,11 +17,11 @@ export class Cake implements Item {
     private packagingType: string;
 
     constructor(
-        type: Type,
+        type: string,
         flavor: string,
         filling: string,
-        size: string,
-        layers: string,
+        size: number,
+        layers: number,
         frostingType: string,
         frostingFlavor: string,
         decorationType: string,
@@ -54,7 +52,7 @@ export class Cake implements Item {
         return ItemCategory.CAKE;
     }
 
-    getType(): Type {
+    getType(): string {
         return this.type;
     }
 
@@ -66,11 +64,11 @@ export class Cake implements Item {
         return this.filling;
     }
 
-    getSize(): string {
+    getSize(): number {
         return this.size;
     }
 
-    getLayers(): string {
+    getLayers(): number {
         return this.layers;
     }
 
