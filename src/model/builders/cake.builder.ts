@@ -86,6 +86,9 @@ export class CakeBuilder {
         return this;
     }
     
+    public static newBuilder(): CakeBuilder {
+        return new CakeBuilder();
+    }
 
     build(): Cake {
         const requiredProperties = [
@@ -106,7 +109,7 @@ export class CakeBuilder {
         ];
 
         for ( const property of requiredProperties ) {
-            if (!property) {
+            if (property === undefined || property === null) {
                 logger.error("Missing required properties, could not build a cake");
                 throw new Error("Missing required properties");
             }
