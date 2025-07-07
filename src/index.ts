@@ -1,15 +1,56 @@
-import { readCSVFile } from "./util/parsers/csvParser";
-import { CSVCakeMapper } from "./mappers/Cake.mapper";
-import logger from "./util/logger";
-import { CSVOrderMapper } from "./mappers/Order.mapper";
+import logger from './util/logger';
+import config  from './config';
+import express from 'express';
+import helmet from 'helmet';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import requestLogger from './middleware/requestLogger';
+import routes from './routes';
+import { NextFunction, Request , Response } from "express";
+import { HttpException } from './util/exceptions/HttpException';
 
-async function main() {
-    const data = await readCSVFile("./src/data/cake orders.csv")
-    const cakeMapper = new CSVCakeMapper();
-    const orderMapper = new CSVOrderMapper(cakeMapper)
-    const orders = data.map(row => orderMapper.map(row));
 
-    logger.info("List of cakes: \n %o",orders);
-}
+const app = express();
 
-main()
+// config helmet
+app.use(helmet());
+
+// config body parser
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// config cors
+app.use(cors());
+
+// add middlewares
+app.use(requestLogger);
+
+// config routes
+app.use('/', routes);
+
+// config 404 handler
+app.use((req, res) => {
+    res.status(404).json({error: "Not Found"});
+})
+
+// config error handler
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    if ( err instanceof HttpException ) {
+        const httpException = err as HttpException;
+        logger.error(" %s [%d} : \"%s\" %o", httpException.name, httpException.status, httpException.message, httpException.details || {});
+        res.status(httpException.status).json({ 
+            message: httpException.message,
+            details: httpException.details || undefined 
+        });
+    } else {
+        logger.error("Unhandled Error: %s", err.message);
+        res.status(500).json({
+             message: "Internal Server Error"
+             });
+    }
+})
+
+app.listen(config.port, config.host, () => {
+    logger.info('Server is running on http://%s:%d', config.host, config.port);
+});
+
