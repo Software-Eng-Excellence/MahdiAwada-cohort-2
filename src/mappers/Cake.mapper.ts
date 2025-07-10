@@ -104,3 +104,49 @@ export class SQLLiteCakeMapper implements IMapper<SQLLiteCake ,IdentifiableCake>
     }
     
 }
+
+export class JsonCakeRequestMapper implements IMapper<any, IdentifiableCake> {
+    map(data: any): IdentifiableCake {
+        const cake = CakeBuilder.newBuilder()
+            .setType(data.type)
+            .setFlavor(data.flavor)
+            .setFilling(data.filling)
+            .setSize(Number(data.size))
+            .setLayers(Number(data.layers))
+            .setFrostingType(data.frostingType)
+            .setFrostingFlavor(data.frostingFlavor)
+            .setDecorationType(data.decorationType)
+            .setDecorationColor(data.decorationColor)
+            .setCustomMessage(data.customMessage)
+            .setShape(data.shape)
+            .setAllergies(data.allergies)
+            .setSpecialIngredients(data.specialIngredients)
+            .setPackagingType(data.packagingType)
+            .build();
+
+        return IdentifiableCakeBuilder.newBuilder()
+            .setId(data.id)
+            .setCake(cake)
+            .build();
+    }
+
+    reverseMap(data: IdentifiableCake): any {
+        return {
+            id: data.getId(),
+            type: data.getType(),
+            flavor: data.getFlavor(),
+            filling: data.getFilling(),
+            size: data.getSize(),
+            layers: data.getLayers(),
+            frostingType: data.getFrostingType(),
+            frostingFlavor: data.getFrostingFlavor(),
+            decorationType: data.getDecorationType(),
+            decorationColor: data.getDecorationColor(),
+            customMessage: data.getCustomMessage(),
+            shape: data.getShape(),
+            allergies: data.getAllergies(),
+            specialIngredients: data.getSpecialIngredients(),
+            packagingType: data.getPackagingType()
+        };
+    }
+}

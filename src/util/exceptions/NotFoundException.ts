@@ -5,4 +5,4 @@ export class NotFoundException extends HttpException {
         super(404, message, details);
         this.name = "NotFoundException";
     }
-}
+} 

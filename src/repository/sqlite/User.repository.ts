@@ -19,20 +19,20 @@ const SELECT_BY_ID = `SELECT * FROM "user" WHERE id = ?`;
 
 const SELECT_ALL = `SELECT * FROM "user"`;
 
+const SELECT_BY_EMAIL = `SELECT * FROM "user" WHERE email = ?`;
+
 const DELETE_USER = `DELETE FROM "user" WHERE id = ?`;
 
 const UPDATE_USER = `UPDATE "user" SET name = ?, email = ?, password = ? WHERE id = ?`;
 
-const SELECT_BY_EMAIL = `SELECT * FROM "user" WHERE email = ?`;
-
 export class UserRepository implements IRepository<User>, InitializableRepository<User> {
     private db: Database | null = null;
-    async init() {
+    async init(): Promise<void> {
         try {
-            const conn = await ConnectionManager.getConnection();
-            await conn.exec(CREATE_TABLE);
+            this.db = await ConnectionManager.getConnection();
+            await this.db.exec(CREATE_TABLE);
             logger.info("User table initialized");
-        } catch (error: unknown) {
+        } catch (error) {
             logger.error("Failed to initialize User table", error as Error);
             throw new InitializationException("Failed to initialize User table", error as Error);
         }
@@ -106,12 +106,13 @@ export class UserRepository implements IRepository<User>, InitializableRepositor
         }
     }
 
-    async getByEmail(email: string): Promise<User | null> {
+    async getByEmail(email: string): Promise<User> {
         try {
             const conn = await ConnectionManager.getConnection();
             const result = await conn.get<SQLiteUser>(SELECT_BY_EMAIL, email);
             if (!result) {
-                return null;
+                logger.error("User with email %s not found", email);
+                throw new Error("User with email " + email + " not found");
             }
             return new SQLiteUserMapper().map(result);
         } catch (error) {
@@ -119,6 +120,7 @@ export class UserRepository implements IRepository<User>, InitializableRepositor
             throw new DbException("Failed to get user by email " + email, error as Error);
         }
     }
+
 } 
 
 export async function createUserRepository(): Promise<UserRepository> {

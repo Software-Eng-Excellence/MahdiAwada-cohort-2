@@ -29,6 +29,7 @@ export class OrderController {
                     });
             }
             const order = await this.orderService.getOrder(id);
+            response.status(200).json(order);
     }
     // get all Orders
     public async getOrders(request: Request, response: Response) {

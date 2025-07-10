@@ -1,4 +1,4 @@
-import { IUser, User } from "../model/User.model";
+import { User } from "../model/User.model";
 
 export interface SQLiteUser {
     id: string;
@@ -8,7 +8,7 @@ export interface SQLiteUser {
 }
 
 export class SQLiteUserMapper {
-    map(data: SQLiteUser): IUser {
+    map(data: SQLiteUser): User {
         return new User(
             data.name,
             data.email,
@@ -17,7 +17,7 @@ export class SQLiteUserMapper {
         );
     }
 
-    mapToSQLite(user: IUser): SQLiteUser {
+    mapToSQLite(user: User): SQLiteUser {
         return {
             id: user.getId(),
             name: user.getName(),
