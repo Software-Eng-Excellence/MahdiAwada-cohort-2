@@ -20,5 +20,11 @@ export default {
     auth: {
         secretKey: process.env.JWT_SECRET_KEY || "secret_1234567890",
         tokenExpiration: (process.env.TOKEN_EXPIRATION || "1h") as StringValue
+    },
+    postgresql: {
+        user: process.env.USER,
+        db_port: process.env.DBPORT ? parseInt(process.env.DBPORT) : 5432,
+        password: process.env.DBPASSWORD,
+        database: process.env.DATABASE,
     }
 }

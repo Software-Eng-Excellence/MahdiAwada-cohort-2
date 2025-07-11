@@ -1,4 +1,3 @@
-import { AuthRequest } from "config/types";
 import { NextFunction , Request , Response } from "express";
 import { AuthenticationService } from "../services/authentication.service";
 import { AuthenticationFailedException } from "../util/exceptions/AuthenticationException";

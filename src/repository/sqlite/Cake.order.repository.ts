@@ -77,10 +77,10 @@ export class CakeRepository implements IRepository<IdentifiableCake>, Initializa
         try {
         const conn = await ConnectionManager.getConnection()
         await conn.exec(CREATE_TABLE);
-        logger.info("Order table initialized")
+        logger.info("Cake table initialized")
         } catch (error: unknown) {
             logger.error("Failed to initialize Cake table", error as Error);
-            throw new InitializationException("Failed to initialize Order table", error as Error)
+            throw new InitializationException("Failed to initialize Cake table", error as Error)
         }
     }
     async create(item: IdentifiableCake): Promise<id> {
