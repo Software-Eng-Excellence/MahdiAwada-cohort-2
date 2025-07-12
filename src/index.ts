@@ -16,8 +16,8 @@ const app = express();
 app.use(helmet());
 
 // config body parser
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // config cors
 app.use(cors());
