@@ -3,8 +3,8 @@ import { IIdentifiableOrderItem } from "../model/IOrder";
 import { ItemCategory } from "../model/IItem";
 import { IRepository } from "../repository/IRepository";
 import  config  from "../config";
-import { NotFoundException } from "../util/exceptions/NotFoundException";
-import { BadRequestException } from "../util/exceptions/BadRequestException";
+import { NotFoundException } from "../util/exceptions/http/NotFoundException";
+import { BadRequestException } from "../util/exceptions/http/BadRequestException";
 
 export class OrderManagementService {
 

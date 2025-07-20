@@ -1,7 +1,7 @@
 import { User } from "../model/User.model";
 import { createUserRepository, UserRepository } from "../repository/sqlite/User.repository";
 import { id } from "../repository/IRepository";
-import { NotFoundException } from "../util/exceptions/NotFoundException";
+import { NotFoundException } from "../util/exceptions/http/NotFoundException";
 
 export class UserManagementService {
     private userRepository?: UserRepository;
@@ -22,7 +22,7 @@ export class UserManagementService {
         (await this.getRepo()).delete(userId);
     }
 
-    async validateUser(email: string, password: string): Promise<id> {
+    async validateUser(email: string, password: string): Promise<User> {
         const user: User = await (await this.getRepo()).getByEmail(email);
         if(!user) {
             throw new NotFoundException('User not found via email');
@@ -30,7 +30,7 @@ export class UserManagementService {
         if(user.getPassword() !== password) {
             throw new NotFoundException('Invalid password');
         }
-        return user.getId()
+        return user
     }
 
     private async getRepo() {

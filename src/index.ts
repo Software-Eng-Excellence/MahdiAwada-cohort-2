@@ -7,10 +7,11 @@ import cors from 'cors';
 import requestLogger from './middleware/requestLogger';
 import routes from './routes';
 import { NextFunction, Request , Response } from "express";
-import { HttpException } from './util/exceptions/HttpException';
-
+import { HttpException } from './util/exceptions/http/HttpException';
+import cookieParser from 'cookie-parser'
 
 const app = express();
+
 
 // config helmet
 app.use(helmet());
@@ -18,6 +19,9 @@ app.use(helmet());
 // config body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// cookie parser
+app.use(cookieParser())
 
 // config cors
 app.use(cors());

@@ -1,15 +1,18 @@
+import { Role } from "../config/roles";
+import { ID } from "../repository/IRepository";
 
-export class User {
-    constructor(
-        private name: string,
-        private email: string,
-        private password: string,
-        private id: string
-    ) {
+export class User implements ID{
+    id: string;
+    name: string;
+    email: string;
+    password: string;
+    role: string;
+    constructor(name: string,email: string,password: string,id: string,role: Role = Role.user) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.id = id;
+        this.role = role;
     }
 
     getName(): string {
@@ -26,5 +29,9 @@ export class User {
 
     getId(): string {
         return this.id;
+    }
+    
+    getRole(): string {
+        return this.role;
     }
 } 

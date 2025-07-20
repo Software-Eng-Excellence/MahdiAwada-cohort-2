@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { OrderManagementService } from "../services/orderManagement.service";
 import { IdentifiableOrderItem } from "../model/Order.model";
 import { JsonRequestFactory } from "../mappers";
-import { BadRequestException } from "../util/exceptions/BadRequestException";
+import { BadRequestException } from "../util/exceptions/http/BadRequestException";
 
 
 export class OrderController {

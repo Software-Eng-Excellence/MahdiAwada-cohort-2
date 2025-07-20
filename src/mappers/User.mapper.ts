@@ -1,3 +1,4 @@
+import { toRole } from "../config/roles";
 import { User } from "../model/User.model";
 
 export interface SQLiteUser {
@@ -5,6 +6,7 @@ export interface SQLiteUser {
     name: string;
     email: string;
     password: string;
+    role: string;
 }
 
 export class SQLiteUserMapper {
@@ -13,7 +15,8 @@ export class SQLiteUserMapper {
             data.name,
             data.email,
             data.password,
-            data.id
+            data.id,
+            toRole(data.role)
         );
     }
 
@@ -22,7 +25,8 @@ export class SQLiteUserMapper {
             id: user.getId(),
             name: user.getName(),
             email: user.getEmail(),
-            password: user.getPassword()
+            password: user.getPassword(),
+            role: user.getRole()
         };
     }
 } 

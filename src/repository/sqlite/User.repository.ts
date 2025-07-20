@@ -10,10 +10,10 @@ const CREATE_TABLE = `CREATE TABLE IF NOT EXISTS "user" (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL
-)`;
+    password TEXT NOT NULL);
+    `;
 
-const INSERT_USER = `INSERT INTO "user" (id, name, email, password) VALUES (?, ?, ?, ?)`;
+const INSERT_USER = `INSERT INTO "user" (id, name, email, password, role) VALUES (?, ?, ?, ?, ?)`;
 
 const SELECT_BY_ID = `SELECT * FROM "user" WHERE id = ?`;
 
@@ -23,7 +23,7 @@ const SELECT_BY_EMAIL = `SELECT * FROM "user" WHERE email = ?`;
 
 const DELETE_USER = `DELETE FROM "user" WHERE id = ?`;
 
-const UPDATE_USER = `UPDATE "user" SET name = ?, email = ?, password = ? WHERE id = ?`;
+const UPDATE_USER = `UPDATE "user" SET name = ?, email = ?, password = ?, role = ? WHERE id = ?`;
 
 export class UserRepository implements IRepository<User>, InitializableRepository<User> {
     private db: Database | null = null;
@@ -31,6 +31,9 @@ export class UserRepository implements IRepository<User>, InitializableRepositor
         try {
             this.db = await ConnectionManager.getConnection();
             await this.db.exec(CREATE_TABLE);
+            await this.db.exec(`
+                ALTER TABLE USERS ADD COLUMN IF NOT EXISTS role TEXT DEFAULT 'user';
+                `);
             logger.info("User table initialized");
         } catch (error) {
             logger.error("Failed to initialize User table", error as Error);
@@ -45,7 +48,8 @@ export class UserRepository implements IRepository<User>, InitializableRepositor
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
-                user.getPassword()
+                user.getPassword(),
+                user.getRole()
             ]);
             return user.getId();
         } catch (error: unknown) {
@@ -57,12 +61,13 @@ export class UserRepository implements IRepository<User>, InitializableRepositor
     async get(id: id): Promise<User> {
         try {
             const conn = await ConnectionManager.getConnection();
-            const result = await conn.get<SQLiteUser>(SELECT_BY_ID, id);
-            if (!result) {
+            const user = await conn.get(SELECT_BY_ID, id);
+            if (!user) {
                 logger.error("User of id %s not found", id);
                 throw new Error("User of id " + id + " not found");
             }
-            return new SQLiteUserMapper().map(result);
+            const mapper = new SQLiteUserMapper();
+            return mapper.map(user);
         } catch (error) {
             logger.error("Failed to get user of id %s %o", id, error as Error);
             throw new DbException("Failed to get user of id " + id, error as Error);
@@ -88,7 +93,8 @@ export class UserRepository implements IRepository<User>, InitializableRepositor
                 user.getName(),
                 user.getEmail(),
                 user.getPassword(),
-                user.getId()
+                user.getRole(),
+                user.getId(),
             ]);
         } catch (error: unknown) {
             logger.error("Failed to update user of id %s %o", user.getId(), error as Error);

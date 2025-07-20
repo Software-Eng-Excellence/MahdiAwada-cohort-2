@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import { UserManagementService } from "../services/userManagement.service";
-import { BadRequestException } from "../util/exceptions/BadRequestException";
-import { NotFoundException } from "../util/exceptions/NotFoundException";
+import { BadRequestException } from "../util/exceptions/http/BadRequestException";
+import { NotFoundException } from "../util/exceptions/http/NotFoundException";
 import { ServiceException } from "../util/exceptions/ServiceException";
 import { User } from "../model/User.model";
 import { generateUUID } from "../util";
 import logger from "../util/logger";
+import { toRole } from "../config/roles";
 
 export class UserController {
     private userService: UserManagementService;
@@ -14,7 +15,7 @@ export class UserController {
     }
 
     // Create a user
-    public async createUser(request: Request, response: Response) {
+    public async createUser(request: Request, response: Response): Promise<void> {
         try {
             const { name, email, password } = request.body;
             
@@ -26,7 +27,7 @@ export class UserController {
             });
         }
 
-        const newUser = new User(name, email, password, generateUUID('user'));
+        const newUser = new User(name, email, password, generateUUID('user'), toRole('user'));
         const userId = await this.userService.createUser(newUser);
         
         try {
@@ -98,7 +99,8 @@ export class UserController {
                     name || existingUser.getName(),
                     email || existingUser.getEmail(),
                     password || existingUser.getPassword(),
-                    existingUser.getId()
+                    existingUser.getId(),
+                    toRole(existingUser.getRole())
                 );
 
                 await this.userService.updateUser(updateUser);
