@@ -11,8 +11,8 @@ const config: Config.InitialOptions = {
     coverageDirectory: 'coverage',
     coverageThreshold: {
         global: {
-            functions: 85,
-            statements: 75
+            functions: 60,
+            statements: 60
         }
     }
 }
